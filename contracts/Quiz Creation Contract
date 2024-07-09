@@ -1,0 +1,16 @@
+// Define the Quiz Creation Contract
+pub struct QuizCreationContract;
+
+#[contractimpl]
+impl QuizCreationContract {
+    pub fn new_quiz(env: Env, org_address: Address, content: Vec<u8>, reward_amount: i128) -> Symbol {
+        // Store the quiz content and reward amount
+        env.storage().set(org_address, (content, reward_amount));
+        Symbol::short("QuizCreated")
+    }
+
+    pub fn get_quiz(env: Env, org_address: Address) -> (Vec<u8>, i128) {
+        // Retrieve quiz content and reward amount
+        env.storage().get(org_address).unwrap()
+    }
+}
