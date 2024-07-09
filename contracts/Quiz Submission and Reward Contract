@@ -1,0 +1,22 @@
+// Define the Quiz Submission and Reward Contract
+pub struct QuizSubmissionContract;
+
+#[contractimpl]
+impl QuizSubmissionContract {
+    pub fn submit_answers(env: Env, user_address: Address, org_address: Address, answers: Vec<u8>) -> Symbol {
+        let (content, reward_amount): (Vec<u8>, i128) = env.storage().get(org_address).unwrap();
+
+        // Validate answers (placeholder logic)
+        let correct = true; // Assume all answers are correct for this example
+
+        if correct {
+            // Update user balance
+            let mut user_balance: i128 = env.storage().get(user_address).unwrap_or(0);
+            user_balance += reward_amount;
+            env.storage().set(user_address, user_balance);
+            Symbol::short("RewardGranted")
+        } else {
+            Symbol::short("IncorrectAnswers")
+        }
+    }
+}
