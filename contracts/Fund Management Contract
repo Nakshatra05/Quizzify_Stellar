@@ -1,0 +1,25 @@
+// Define the Fund Management Contract
+pub struct FundManagementContract;
+
+#[contractimpl]
+impl FundManagementContract {
+    pub fn fund_quiz(env: Env, org_address: Address, amount: i128) -> Symbol {
+        // Store the funding amount for the quiz
+        let mut total_funds: i128 = env.storage().get(org_address).unwrap_or(0);
+        total_funds += amount;
+        env.storage().set(org_address, total_funds);
+        Symbol::short("FundsAdded")
+    }
+
+    pub fn withdraw_funds(env: Env, org_address: Address, amount: i128) -> Symbol {
+        // Allow withdrawal of unspent funds
+        let mut total_funds: i128 = env.storage().get(org_address).unwrap();
+        if total_funds >= amount {
+            total_funds -= amount;
+            env.storage().set(org_address, total_funds);
+            Symbol::short("FundsWithdrawn")
+        } else {
+            Symbol::short("InsufficientFunds")
+        }
+    }
+}
