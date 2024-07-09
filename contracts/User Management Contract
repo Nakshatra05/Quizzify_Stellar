@@ -1,0 +1,24 @@
+// Define the User Management Contract
+pub struct UserManagementContract;
+
+#[contractimpl]
+impl UserManagementContract {
+    pub fn register_user(env: Env, user_address: Address) -> Symbol {
+        // Register a new user with a zero balance
+        env.storage().set(user_address, 0_i128);
+        Symbol::short("UserRegistered")
+    }
+
+    pub fn get_user_balance(env: Env, user_address: Address) -> i128 {
+        // Retrieve user balance
+        env.storage().get(user_address).unwrap_or(0)
+    }
+
+    pub fn update_balance(env: Env, user_address: Address, amount: i128) -> Symbol {
+        // Update user balance
+        let mut balance: i128 = env.storage().get(user_address).unwrap_or(0);
+        balance += amount;
+        env.storage().set(user_address, balance);
+        Symbol::short("BalanceUpdated")
+    }
+}
